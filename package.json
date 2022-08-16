@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://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@github.com/skanno/chat.git"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +15,7 @@
   "homepage": "https://github.com/skanno/chat#readme",
   "dependencies": {
     "express": "^4.18.1",
-    "socket.io": "^4.5.1"
+    "socket.io": "^4.5.1",
+    "vue": "^3.0.4"
   }
 }
