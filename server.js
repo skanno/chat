@@ -14,10 +14,28 @@ let io = new Server(http, {
 });
 
 io.on('connection', function(socket) {
-    console.log('connected');
+    /**
+     * 入室をします。
+     */
+    socket.on('join_room', function(roomName) {
+        console.log(`Call, join. Room Name: ${roomName}`);
+        socket.join(roomName);
+    });
+
+    /**
+     * 退室をします。
+     */
+    socket.on('leave_room', function(roomName) {
+        console.log(`Call, leave. Room Name: ${roomName}`);
+        socket.leave(roomName);
+    });
+
+    /**
+     * メッセージを受信し配信します。
+     */
     socket.on('message', function(msg) {
-        console.log(`message: ${msg}`);
-        io.emit('message', msg);
+        console.log(`Call, message. Room Name: ${msg.roomName}. Message: ${msg.body}.`);
+        io.to(msg.roomName).emit('message', msg.body);
     });
 });
 
