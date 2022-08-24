@@ -1,6 +1,7 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import { addMessage } from './strage.js';
 import config from 'config';
 
 const PORT = process.env.PORT || config.get('port');
@@ -35,6 +36,7 @@ io.on('connection', function(socket) {
      */
     socket.on('message', function(msg) {
         console.log(`Call, message. Room Name: ${msg.roomName}. Message: ${msg.body}.`);
+        addMessage(msg.roomName, msg.userName, msg.body);
         io.to(msg.roomName).emit('message', msg.body);
     });
 });

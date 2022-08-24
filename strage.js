@@ -13,8 +13,8 @@ const getConnection = () => {
   return con;
 };
 
-const addMessage = (roomName, userName, message) => {
-  con = getConnection();
+export const addMessage = (roomName, userName, message) => {
+  let con = getConnection();
   con.query(
     'INSERT INTO messages (room_name, user_name, message) VALUES (?, ?, ?)',
     [roomName, userName, message]
