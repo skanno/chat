@@ -1,7 +1,7 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { addMessage } from './strage.js';
+import { addMessage, getMessageList } from './strage.js';
 import config from 'config';
 
 const PORT = process.env.PORT || config.get('port');
@@ -21,6 +21,9 @@ io.on('connection', function(socket) {
     socket.on('join_room', function(roomName) {
         console.log(`Call, join. Room Name: ${roomName}`);
         socket.join(roomName);
+        getMessageList(roomName, (error, results) => {
+            io.to(roomName).emit('message_list', results);
+        });
     });
 
     /**
