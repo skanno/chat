@@ -24,6 +24,19 @@ export const addMessage = (roomName, userName, message) => {
 
 export const getMessageList = (roomName, callback) => {
   let con = getConnection();
-  con.query('SELECT * FROM messages WHERE room_name = ? ORDER BY create_at', [roomName], callback);
+  const selectQuery = `
+    SELECT
+      room_name AS roomName,
+      user_name AS userName,
+      message AS message,
+      create_at AS createAt
+    FROM
+      messages
+    WHERE
+      room_name = ?
+    ORDER BY
+      create_at`;
+
+  con.query(selectQuery, [roomName], callback);
   con.end();
 };

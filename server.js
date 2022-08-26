@@ -1,11 +1,11 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import { addMessage, getMessageList } from './strage.js';
+import { addMessage, getMessageList } from './storage.js';
 import config from 'config';
 
-const PORT = process.env.PORT || config.get('port');
-const CORS_ORIGIN = config.get('origin');
+const PORT = process.env.PORT || config.get('server_port');
+const CORS_ORIGIN = config.get('cors_origin');
 let app = express();
 let http = createServer(app);
 let io = new Server(http, {
@@ -22,7 +22,7 @@ io.on('connection', function(socket) {
         console.log(`Call, join. Room Name: ${roomName}`);
         socket.join(roomName);
         getMessageList(roomName, (error, results) => {
-            io.to(roomName).emit('message_list', results);
+            io.to(roomName).emit('show_old_message_list', results);
         });
     });
 
@@ -37,10 +37,10 @@ io.on('connection', function(socket) {
     /**
      * メッセージを受信し配信します。
      */
-    socket.on('message', function(msg) {
-        console.log(`Call, message. Room Name: ${msg.roomName}. Message: ${msg.body}.`);
-        addMessage(msg.roomName, msg.userName, msg.body);
-        io.to(msg.roomName).emit('message', msg.body);
+    socket.on('send_message', function(oneMessage) {
+        console.log(`Call, message. Room Name: ${oneMessage.roomName}. Message: ${oneMessage.message}.`);
+        addMessage(oneMessage.roomName, oneMessage.userName, oneMessage.message);
+        io.to(oneMessage.roomName).emit('show_message', oneMessage);
     });
 });
 
