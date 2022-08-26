@@ -1,6 +1,9 @@
 server_port: 3000
 cors_origin: http://host:3001
+
 db_host: mysql
 db_user: user
 db_password: password
 db_database: chat
+
+init_message_size: 25

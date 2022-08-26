@@ -24,19 +24,31 @@ export const addMessage = (roomName, userName, message) => {
 
 export const getMessageList = (roomName, callback) => {
   let con = getConnection();
+
   const selectQuery = `
     SELECT
-      room_name AS roomName,
-      user_name AS userName,
-      message AS message,
-      create_at AS createAt
+      *
     FROM
-      messages
-    WHERE
-      room_name = ?
+      (SELECT
+        room_name AS roomName,
+        user_name AS userName,
+        message AS message,
+        create_at AS createAt
+      FROM
+        messages
+      WHERE
+        room_name = ?
+      ORDER BY
+        create_at DESC
+      LIMIT
+        ?) AS t
     ORDER BY
-      create_at`;
+      t.createAt`;
 
-  con.query(selectQuery, [roomName], callback);
+  con.query(selectQuery, [
+    roomName,
+    config.get('init_message_size')
+  ], callback);
+
   con.end();
 };
