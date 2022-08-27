@@ -1,6 +1,7 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import moment from 'moment-timezone';
 import { addMessage, getMessageList } from './storage.js';
 import config from 'config';
 
@@ -38,6 +39,7 @@ io.on('connection', function(socket) {
      * メッセージを受信し配信します。
      */
     socket.on('send_message', function(oneMessage) {
+        oneMessage.createAt = moment().tz("Asia/Tokyo").format('YYYY-MM-DD HH:mm:ss');
         console.log(`Call, message. Room Name: ${oneMessage.roomName}. Message: ${oneMessage.message}.`);
         addMessage(oneMessage.roomName, oneMessage.userName, oneMessage.message);
         io.to(oneMessage.roomName).emit('show_message', oneMessage);

@@ -33,7 +33,7 @@ export const getMessageList = (roomName, callback) => {
         room_name AS roomName,
         user_name AS userName,
         message AS message,
-        create_at AS createAt
+        DATE_FORMAT(create_at, '%Y-%m-%d %T') AS createAt
       FROM
         messages
       WHERE
